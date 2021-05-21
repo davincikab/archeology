@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Interface</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+</head>
+<body>
+    <div class="container">
+        <div class="inner-container">
+            <div class="container-one">
+                <div class="title-section">
+                    <h5>Archeological Findings and Research</h5>
+                </div>
+                <div class="map-section">
+                    <defs>
+                        <pattern id="pattern1"
+                                 x="10" y="10" width="20" height="20"
+                                 patternUnits="userSpaceOnUse" >
+                      
+                            <circle cx="10" cy="10" r="10" style="stroke: none; fill: #0000ff" />
+                      
+                        </pattern>
+                      </defs>
+                      
+                      <rect x="10" y="10" width="100" height="100"
+                          style="stroke: #000000; fill: url(#pattern1);" />    
+                    <div id="map"></div>
+                </div>
+            </div>
+            <div class="container-two">
+                <div class="selection-section">
+                    <p>Selection</p>
+                    <div class="layer-item">
+                        <input type="checkbox" name="research" id="research" class="layer-overlay" checked>
+                        <label for="research">Research</label>
+                    </div>
+
+                    <div class="layer-item-group">
+                        <div class="layer-item">
+                            <input type="checkbox" name="artefacts" id="artefacts" class="layer-overlay" checked>
+                            <label for="artefacts">Artefacts</label>
+                        </div>
+
+                        <div id="artefacts-item"></div>
+                    </div>
+
+                    
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-item">
+                        <div class="div-marker" style="height:12px; width:12px; position: relative;"></div>
+                        <div>Finding</div>
+                    </div>
+
+                    <div class="legend-item">
+                        <div class="legend-box" style="background-color: #d3d3d3; border:2px dotted red;"></div>
+                        <div>Research Area</div>
+                    </div>
+
+                    <div class="legend-item">
+                        <div class="legend-box" style="background-color: transparent; border:2px solid green;"></div>
+                        <div>Oak Island</div>
+                    </div>
+                </div>
+
+                <div class="author-section">
+                    <div>Author</div>
+                    <div>
+                        <b>King Steer</b>
+                    </div>
+                </div>
+
+                <div class="logo-section">
+                    <p>Logo ...</p>
+                    <img src="" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+
+    <script src="/javascripts/leaflet-timeline-slider.js"></script>
+    <script src="/javascripts/main.js"></script>
+</body>
+</html>

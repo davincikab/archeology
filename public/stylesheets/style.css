@@ -1,0 +1,144 @@
+body {
+  padding: 0px;
+  margin: 0px;
+  font: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: #00B7FF;
+}
+
+p {
+  margin:0.25em;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.inner-container {
+  height: inherit;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+}
+
+.container-one {
+  display: block;
+  height: 100vh;
+}
+
+.container-one > div {
+  border:1px solid #333;
+}
+
+.title-section {
+  grid-template-rows: 1fr;
+  text-align: center;
+  height: 10vh;
+}
+
+.title-section h5 {
+  font-size: 1.5em;
+  margin: 0.3em 0;
+}
+
+#map {
+  width: 100%;
+  height:90vh;
+}
+
+.container-two {
+  display: grid;
+  background: white;
+  grid-template-rows: 3fr 2fr 1fr 1fr;
+}
+
+.container-two > div {
+  border:1px solid #333;
+}
+
+.layer-item-group .layer-child {
+  margin-left:15px;
+}
+
+.legend-section, .author-section {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.legend-section .legend-item{
+  display: flex;
+  align-items: center;
+  margin:0.25em 0.3em;
+}
+
+.legend-item > div:first-child {
+  margin-right: 5px;
+}
+
+.legend-item .legend-box {
+  width:30px;
+  height: 15px;
+  background-color: pink;
+  margin-right: 5px;
+}
+
+.author-section {
+  padding: 5px;
+  text-align: left;
+}
+
+/* leaflet styling */
+.div-marker {
+  height:6px;
+  width:6px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0px 0px 0.2em 0.2em #112120;
+}
+
+.itemKey {
+  text-transform: uppercase;
+  color:#888888;
+  padding-right: 5px;
+}
+
+.popup-content {
+  padding-top: 5px;
+  max-height: 300px;
+  margin-top: 18px;
+  overflow-y: auto;
+}
+
+.popup-content .title {
+  font-weight: 700;
+  font-size: 1.2em;
+  margin:0;
+}
+
+.popup-content p {
+  margin:0 !important;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leaflet-popup-content {
+  margin: 6px 8px;
+  line-height: 1.4;
+}
+
+.leaflet-popup-tip {
+  background: #222;
+}
+.leaflet-popup-content-wrapper {
+  padding: 1px;
+  text-align: left;
+  border-radius: 1px;
+  background-color: #222;
+}
