@@ -2,10 +2,14 @@ var layerChildrens, activeChildren = [], artefactsContainer = document.getElemen
 var layerItems = document.querySelectorAll(".layer-item .layer-overlay");
 
 console.log(layerItems);
-var map = L.map('map').setView([44.5131, -64.2928], 16);
+var map = L.map('map', {
+    maxZoom:16,
+    minZoom:10
+}).setView([44.5131, -64.2928], 16);
 
 L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-    maxZoom:18
+    // attribution: 'map data \u00a9 [[https://osm.org/copyright|OpenStreetMap contributors]] under ODbL  - Tiles \u00a9 HOT',
+    maxZoom: 20,
 }).addTo(map);
 
 // divIcon
@@ -122,9 +126,9 @@ fetch("/research-areas/")
 L.control.timelineSlider({
     timelineItems: [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021],
     activeColor:'#2ca82a',
-    extraChangeMapParams: {greeting: "Hello World!"}, 
-    changeMap: changeMapFunction })
-.addTo(map);
+    extraChangeMapParams: {}, 
+    changeMap: changeMapFunction 
+}).addTo(map);
 
 function changeMapFunction({label, value, map, exclamation} ) {
     let year = label;
@@ -142,7 +146,7 @@ function changeMapFunction({label, value, map, exclamation} ) {
 
     researchAreas.eachLayer(layer => {
         // update opacity
-        let timeStop = new Date(layer.feature.properties.TIME_STOP);
+        let timeStop = new Date(layer.feature.properties.time_stop);
 
         if(timeStop.getFullYear() <= year) {
             layer.setStyle({
