@@ -1,5 +1,6 @@
 var layerChildrens, activeChildren = [], artefactsContainer = document.getElementById("artefacts-item");
 var layerItems = document.querySelectorAll(".layer-item .layer-overlay");
+var activeYear;
 
 console.log(layerItems);
 var map = L.map('map', {
@@ -132,6 +133,9 @@ L.control.timelineSlider({
 
 function changeMapFunction({label, value, map, exclamation} ) {
     let year = label;
+    activeYear = label;
+
+    console.log(activeYear);
 
     // filter the respective data
     artefacts.eachLayer(layer => {
@@ -148,7 +152,7 @@ function changeMapFunction({label, value, map, exclamation} ) {
         // update opacity
         let timeStop = new Date(layer.feature.properties.time_stop);
 
-        if(timeStop.getFullYear() <= year) {
+        if(timeStop.getFullYear() == year) {
             layer.setStyle({
                 opacity:1,
                 fillOpacity:1
@@ -191,6 +195,9 @@ function toggleLayer(e) {
 
      if(checked) {
          layer.addTo(map);
+
+        //  effect the time slider filters
+        changeMapFunction({label:activeYear});
      } else {
          map.removeLayer(layer);
      }
@@ -221,13 +228,16 @@ function toggleChildren() {
 
 function fillterArtefactsByOrigin(activeChildren) {
     artefacts.eachLayer(layer => {
+        let discoveryDate = new Date(layer.feature.properties.discovery);
 
-        if(activeChildren.indexOf(layer.feature.properties.origin) == -1) {
-            // 
-            // console.log(layer);
-            layer.setOpacity(0);
+        if(
+            activeChildren.indexOf(layer.feature.properties.origin) != -1 &&
+            discoveryDate.getFullYear() <= activeYear
+        ) {
+            layer.setOpacity(1);
         } else {
-            layer.setOpacity(1);    
+            layer.setOpacity(0);    
         }
-    })
+    });
+
 }
