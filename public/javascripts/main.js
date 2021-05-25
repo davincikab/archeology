@@ -1,6 +1,7 @@
 var layerChildrens, activeChildren = [], artefactsContainer = document.getElementById("artefacts-item");
 var layerItems = document.querySelectorAll(".layer-item .layer-overlay");
 var activeYear;
+var isTimesliderActive = false;
 
 console.log(layerItems);
 var map = L.map('map', {
@@ -24,7 +25,7 @@ var artefacts = L.geoJSON(null, {
         "<h6 class='title'>"+ feature.properties.name + "</h6>"+
         "<table>"+
             "<tr><td class='itemKey'>Origin</td> <td>"+ feature.properties.origin +"</td></tr>"+
-            "<tr><td class='itemKey'>Discovery</td> <td>"+ feature.properties.discovery +"</td></tr>"+
+            // "<tr><td class='itemKey'>Discovery</td> <td>"+ feature.properties.discovery +"</td></tr>"+
             "<tr><td class='itemKey'>Age</td> <td>"+ feature.properties.age +"</td></tr>"+
         "</table>"+
         "</div>";
@@ -83,18 +84,22 @@ var researchAreas = L.geoJSON(null, {
     },
     onEachFeature:function(feature, layer) {
         // popups
-        let popupString = "<div class='popup-content'>"+
-        "<h6 class='title'>"+ feature.properties.name + "</h6>"+
-        "<table>"+
-            "<tr><td class='itemKey'>Time Start</td> <td>"+ feature.properties.time_start +"</td></tr>"+
-            "<tr><td class='itemKey'>Time Stop</td> <td>"+ feature.properties.time_stop +"</td></tr>"+
-            "<tr><td class='itemKey'>Type</td> <td>"+ feature.properties.type +"</td></tr>"+
-        "</table>"+
-        "</div>";
+        let popupString = getPopupString(feature);
 
         layer.bindPopup(popupString).openPopup();
     }
 }).addTo(map);
+
+var getPopupString = function(feature) {
+    return "<div class='popup-content'>"+
+        "<h6 class='title'>"+ feature.properties.name + "</h6>"+
+        "<table>"+
+            // "<tr><td class='itemKey'>Time Start</td> <td>"+ feature.properties.time_start +"</td></tr>"+
+            // "<tr><td class='itemKey'>Time Stop</td> <td>"+ feature.properties.time_stop +"</td></tr>"+
+            "<tr><td class='itemKey'>Type</td> <td>"+ feature.properties.type +"</td></tr>"+
+        "</table>"+
+    "</div>";
+}
 
 var oakIsland = L.geoJSON(null, {
     filter:function(feature) {
@@ -132,8 +137,12 @@ L.control.timelineSlider({
 }).addTo(map);
 
 function changeMapFunction({label, value, map, exclamation} ) {
-    let year = label;
-    activeYear = label;
+    let year = +label;
+    activeYear = +label;
+
+    if(!isTimesliderActive && year != 2013) {
+        isTimesliderActive = true;
+    }
 
     console.log(activeYear);
 
@@ -150,18 +159,36 @@ function changeMapFunction({label, value, map, exclamation} ) {
 
     researchAreas.eachLayer(layer => {
         // update opacity
+        let timeStart = new Date(layer.feature.properties.time_start);
         let timeStop = new Date(layer.feature.properties.time_stop);
+        
+        let yearStart = +timeStart.getFullYear();
+        let yearStop = +timeStop.getFullYear();
 
-        if(timeStop.getFullYear() == year) {
+        // console.log(yearStart);
+        // console.log(yearStop);
+        console.log((year >= yearStart) + ":" + (year <= yearStop));
+
+        if(year >= yearStart && year <= yearStop) {
+            console.log(layer);
+            console.log(yearStart + ":" + yearStop);
             layer.setStyle({
                 opacity:1,
-                fillOpacity:1
+                fillOpacity:1,
+                // interactive:true,
             });
+
+            layer.bindPopup(getPopupString(layer.feature));
+            layer.bringToFront();
         } else {
             layer.setStyle({
                 opacity:0,
-                fillOpacity:0
+                fillOpacity:0,
+                // interactive:false
             });
+
+            layer.unbindPopup();
+            layer.bringToBack();
         }
     });
 }
@@ -197,7 +224,9 @@ function toggleLayer(e) {
          layer.addTo(map);
 
         //  effect the time slider filters
-        changeMapFunction({label:activeYear});
+        if(isTimesliderActive) {
+            changeMapFunction({label:activeYear});
+        }
      } else {
          map.removeLayer(layer);
      }
@@ -230,14 +259,45 @@ function fillterArtefactsByOrigin(activeChildren) {
     artefacts.eachLayer(layer => {
         let discoveryDate = new Date(layer.feature.properties.discovery);
 
-        if(
-            activeChildren.indexOf(layer.feature.properties.origin) != -1 &&
-            discoveryDate.getFullYear() <= activeYear
-        ) {
-            layer.setOpacity(1);
+        if(isTimesliderActive) {
+            if(
+                activeChildren.indexOf(layer.feature.properties.origin) != -1 &&
+                discoveryDate.getFullYear() <= activeYear
+            ) {
+                layer.setOpacity(1);
+            } else {
+                layer.setOpacity(0);    
+            }
         } else {
-            layer.setOpacity(0);    
+            if(activeChildren.indexOf(layer.feature.properties.origin) != -1 ) {
+                layer.setOpacity(1);
+            } else {
+                layer.setOpacity(0);    
+            }
         }
+
     });
 
+}
+
+
+// refresh control
+var refreshControl = L.control({position:'topright'});
+refreshControl.onAdd = function(map) {
+    this._container = L.DomUtil.create("div", 'refresh-control');
+
+    this._container.innerHTML = "<img src='/images/refresh-icon.jpg' alt='refresh-icon' aria-label='refresh-icon'/>"
+    this._container.onclick = function(e) {
+        refreshMap();
+    }
+
+    return this._container;
+}
+
+
+refreshControl.addTo(map);
+
+function refreshMap() {
+    // resetLayer style
+    window.location.reload();
 }

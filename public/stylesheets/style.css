@@ -142,3 +142,23 @@ p {
   border-radius: 1px;
   background-color: #222;
 }
+
+.refresh-control.leaflet-control {
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0.1em 0.1em #333;
+  color: black;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-control img{
+  width: 25px;
+  height: 25px;
+  mix-blend-mode: hard-light;
+
+}
